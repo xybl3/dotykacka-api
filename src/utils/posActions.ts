@@ -61,13 +61,23 @@ async function addOderItems(
   cloudId: number,
   branchId: number,
   authorizationToken: string,
+  orderId: number,
   data: AddOrderItems
 ) {
   try {
-    const api = await axios.post(url(cloudId, branchId), {
-      action: "order/add-item" as PosAction,
-      ...data,
-    });
+    const api = await axios.post(
+      url(cloudId, branchId),
+      {
+        action: "order/add-item" as PosAction,
+        "order-id": orderId,
+        ...data,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${authorizationToken}`,
+        },
+      }
+    );
     return api.data;
   } catch (error) {
     throw new Error(`Error adding order items. ${error}`);

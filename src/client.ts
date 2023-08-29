@@ -3,7 +3,7 @@ import {
   CustomerCreateMinimum,
   CustomerResponse,
 } from "./models/customer";
-import { Order, OrderUpdate } from "./models/order";
+import { AddOrderItems, Order, OrderItem, OrderUpdate } from "./models/order";
 import {
   Product,
   ProductCreateMinimum,
@@ -15,7 +15,12 @@ import {
   getCustomers,
   getSingleCustomer,
 } from "./utils/customer";
-import { createOrder, updateOrder } from "./utils/posActions";
+import {
+  addOderItems,
+  cancelOrder,
+  createOrder,
+  updateOrder,
+} from "./utils/posActions";
 import {
   createProducts,
   getProducts,
@@ -361,6 +366,67 @@ class DotykackaClient {
         order
       );
       return orderRes;
+    }
+  }
+
+  /**
+   *
+   * @param {number} orderId
+   * @param {AddOrderItems} order
+   * @returns
+   */
+
+  async addOrderItems(orderId: number, order: AddOrderItems) {
+    const accessToken = await this.accessTokenPromise;
+    try {
+      const orderRes = await addOderItems(
+        this.cloudId,
+        this.branchId,
+        accessToken,
+        orderId,
+        order
+      );
+    } catch (error) {
+      const newToken = getAccessToken(this.cloudId, this.refreshToken);
+      this.accessTokenPromise = newToken;
+      const orderRes = await addOderItems(
+        this.cloudId,
+        this.branchId,
+        await this.accessTokenPromise,
+        orderId,
+        order
+      );
+      return orderRes;
+    }
+  }
+
+  /**
+   * Used to cancel order by order id
+   * You need to remember that you need to have your Dotykacka turned on. Otherwise it will not work, it can hang on creating order or it can throw an error.
+   * @param {number} orderId
+   * @returns
+   */
+
+  async cancelOrder(orderId: number) {
+    const accessToken = await this.accessTokenPromise;
+    try {
+      const canceledOrderRes = await cancelOrder(
+        this.cloudId,
+        this.branchId,
+        accessToken,
+        orderId
+      );
+      return canceledOrderRes;
+    } catch (error) {
+      const newToken = getAccessToken(this.cloudId, this.refreshToken);
+      this.accessTokenPromise = newToken;
+      const canceledOrderRes = await cancelOrder(
+        this.cloudId,
+        this.branchId,
+        await this.accessTokenPromise,
+        orderId
+      );
+      return canceledOrderRes;
     }
   }
 }

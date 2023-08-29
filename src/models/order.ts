@@ -40,7 +40,6 @@ export interface Customization {
 }
 
 export interface AddOrderItems {
-  "order-id": number;
   items: OrderItem[];
   lock: boolean;
 }

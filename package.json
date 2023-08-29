@@ -1,0 +1,22 @@
+{
+  "name": "dotykacka-api",
+  "version": "1.0.1",
+  "description": "Doctykacka.cz api wrapper",
+  "main": "index.js",
+  "author": "Olivier Marszalkowski<marszalkowskiolivier@gmail.com>",
+  "license": "MIT",
+  "type": "commonjs",
+  "devDependencies": {
+    "ts-node": "^10.9.1",
+    "tsc": "^2.0.4",
+    "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "axios": "^1.5.0",
+    "dotykacka-api": "^1.0.1",
+    "dotykacka-api1": "^1.0.1"
+  },
+  "scripts": {
+    "build": "tsc"
+  }
+}
